@@ -1,0 +1,22 @@
+.product-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.product-image {
+  width: 100%;
+}
+
+.button-primary {
+  background-color: #f0c14b;
+  border: 1px solid #a88734;
+  padding: 5px;
+  cursor: pointer;
+}
+body{
+  background-color: gray;
+}
