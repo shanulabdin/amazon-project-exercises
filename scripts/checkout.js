@@ -117,6 +117,7 @@ document.querySelectorAll('.js-delete-link')
     });
   });
 
+
 function updateCartQuantity(){
   let cartQuantity = 0;
 
@@ -125,6 +126,6 @@ function updateCartQuantity(){
   })
 
   document.querySelector('.js-return-to-home-link')
-    .innerHTML = `${cartQuantity} Items`;  
+    .innerHTML = cartQuantity === 0 ? 'Nothing in cart' : `${cartQuantity} Items`;  
 }
 updateCartQuantity()
