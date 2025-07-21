@@ -213,27 +213,27 @@
   background-color: gray;
  }
 
- .quantity-input{
+.quantity-input{
   width: 30px;
   display: none;
- }
+}
 
- .save-quantity-link {
+.save-quality-link {
   display: none;
- }
+}
 
- .is-editing-quantity .quantity-input {
+.is-editing-quantity .quantity-input {
   display: initial;
- }
+}
 
- .is-editing-quantity .save-quantity-link {
+.is-editing-quantity .save-quantity-link {
   display: initial;
- }
+}
 
- .is-editing-quantity .quantity-label {
+.is-editing-quantity .quantity-label {
   display: none;
- }
+}
 
- .is-editing-quantity .update-quantity-link {
+.is-editing-quantity .update-quantity-link {
   display: none;
- }
+}
