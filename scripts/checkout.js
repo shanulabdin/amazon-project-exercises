@@ -126,6 +126,6 @@ function updateCartQuantity(){
   });
 
   document.querySelector('.js-return-to-home-link')
-    .innerHTML = `${cartQuantity} Items`;
+    .innerHTML = cartQuantity === 0 ? 'You Broke?' : `${cartQuantity} Items`;
 }
 updateCartQuantity()
