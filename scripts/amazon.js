@@ -65,7 +65,7 @@ document.querySelector('.js-products-grid')
   .innerHTML = productsHTML;
 
 
-function UpdateCartQuantity(){
+function updateCartQuantity(){
   let cartQuantity = 0;
 
   cart.forEach((cartItem) => {
@@ -81,6 +81,6 @@ document.querySelectorAll('.js-add-to-cart')
     button.addEventListener('click', () =>{
       const {productId} = button.dataset;
       addToCart(productId);
-      UpdateCartQuantity();
+      updateCartQuantity();
     })
   });
