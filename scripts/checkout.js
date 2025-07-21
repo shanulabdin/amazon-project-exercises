@@ -1,6 +1,17 @@
-import { cart, removeFromCart } from '../data/cart.js';
-import { products } from '../data/products.js';
-import { formatCurrency } from './utils/money.js';
+import { 
+  cart, 
+  removeFromCart, 
+  calculateCartQuantity
+} from '../data/cart.js';
+
+import { 
+  products
+ } from '../data/products.js';
+
+import { 
+  formatCurrency 
+} from './utils/money.js';
+
 
 let cartSummaryHTML = '';
 
@@ -15,7 +26,6 @@ cart.forEach((cartItem) => {
     }
   })
 
-  console.log(matchingProduct);
 
   cartSummaryHTML +=
   `
@@ -118,12 +128,10 @@ document.querySelectorAll('.js-delete-link')
     });
   });
 
-function updateCartQuantity(){
-  let cartQuantity = 0;
 
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-  });
+
+function updateCartQuantity(){
+  const cartQuantity = calculateCartQuantity()
 
   document.querySelector('.js-return-to-home-link')
     .innerHTML = cartQuantity === 0 ? 'You Broke?' : `${cartQuantity} Items`;
