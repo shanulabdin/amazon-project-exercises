@@ -212,3 +212,7 @@
  body{
   background-color: gray;
  }
+
+.quantity-input{
+  width: 30px;
+}
