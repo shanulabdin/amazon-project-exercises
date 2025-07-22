@@ -1,7 +1,8 @@
 import { 
   cart, 
   removeFromCart, 
-  calculateCartQuantity
+  calculateCartQuantity,
+  updateQuantity
 } from '../data/cart.js';
 
 import { 
@@ -49,7 +50,7 @@ cart.forEach((cartItem) => {
           </div>
           <div class="product-quantity">
             <span>
-              Quantity: <span class="quantity-label is-editing-quantity">${cartItem.quantity}</span>
+              Quantity: <span class="js-quantity-label-${matchingProduct.id} quantity-label is-editing-quantity">${cartItem.quantity}</span>
             </span>
             <span class="update-quantity-link link-primary js-link-primary" data-product-id="${matchingProduct.id}">
               Update
@@ -167,5 +168,12 @@ document.querySelectorAll('.js-save-quantity-link')
       const newQuantity = Number(quantityInput.value);
 
       console.log(newQuantity);
+
+      updateQuantity(productId, newQuantity)
+
+      const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
+      quantityLabel.innerHTML = newQuantity;
+
+      updateCartQuantity();
     })
   })
