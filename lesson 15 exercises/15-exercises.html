@@ -16,17 +16,26 @@
     import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
 
     function isWeekend(date){
-      const dayOfWeek = date.format('dddd');
-      return dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';      
+      const dayOfWeek = date.format('dddd')
+      return dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';
+
     }
 
     let date = dayjs();
-    console.log(date.format('dddd, MMMM, D'));
+    console.log(date.format('YYYY, MMMM, D, dddd'));
+    console.log(isWeekend(date))
+
+    date = dayjs().add(1, 'day');
+    console.log(date.format('YYYY, dddd, MMMM, D'));
     console.log(isWeekend(date));
 
     date = dayjs().add(2, 'day');
-    console.log(date.format('dddd, MMMM, D'));
+    console.log(date.format('YYYY, M, D, ddd'));
     console.log(isWeekend(date));
+
+    date = dayjs().add(4, 'day');
+    console.log(date.format('D, MMMM, YYYY'))
+    console.log(isWeekend(date))
   </script>
 </body>
 </html>
