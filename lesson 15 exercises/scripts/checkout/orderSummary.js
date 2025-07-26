@@ -148,17 +148,16 @@ export function renderOrderSummary() {
       })
     })
 
+
     document.querySelectorAll('.js-update-link')
-      .forEach((link) => {
+      .forEach((link) => [
         link.addEventListener('click', () => {
           const productId = link.dataset.productId;
-          const container = document.querySelector(`.js-cart-item-container-${productId}`) 
+          const conatiner = document.querySelector(`.js-cart-item-container`);
 
-          container.classList.add('is-editing-quantity');
-
-          console.log(container)
+          conatiner.classList.add('is-editing-quantity');
         })
-      })
+      ])
 
       document.querySelectorAll('.js-save-link')
         .forEach((link) => {
