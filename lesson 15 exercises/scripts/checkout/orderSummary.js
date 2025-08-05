@@ -1,27 +1,10 @@
-import { 
-  cart, 
-  removeFromCart, 
-  updateDilveryOption,
-  updateQuantity
-} from '../../data/cart.js';
-
+import { cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
 import { products, getProduct } from '../../data/products.js';
-
 import { formatCurrency } from '../utils/money.js';
-
 import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
-
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'; 
-
-import { 
-  deliveryOptions, 
-  getDeliveryOption, 
-  calculateDeliveryDate 
-} from '../../data/deliveryOptions.js';
-
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
-
-import { renderCheckoutHeader } from './checkoutHeader.js';
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
@@ -35,10 +18,17 @@ export function renderOrderSummary() {
 
     const  deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    const dateString = calculateDeliveryDate(deliveryOption);
+    const today = dayjs();
+      const deliveryDate = today.add(
+        deliveryOption.deliveryDays,
+        'days'
+      );
+      const dateString = deliveryDate.format(
+        'dddd, MMMM D'
+      );
 
     cartSummaryHTML += `
-      <div class="cart-item-container 
+      <div class="cart-item-container js-cart-item-container
       js-cart-item-container-${matchingProduct.id}">
         <div class="delivery-date">
           Delivery date: ${dateString}
@@ -49,25 +39,22 @@ export function renderOrderSummary() {
             src="${matchingProduct.image}">
 
           <div class="cart-item-details">
-            <div class="product-name">
+            <div class="product-name js-product-name-${matchingProduct.id}">
               ${matchingProduct.name}
             </div>
-            <div class="product-price">
-              ${formatCurrency(matchingProduct.priceCents)}
+            <div class="product-price
+            js-product-price-${matchingProduct.id}">
+              ${matchingProduct.getPrice()}
             </div>
-            <div class="product-quantity">
+            <div class="product-quantity js-product-quantity-${matchingProduct.id}">
               <span>
-                Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
+                Quantity: <span class="quantity-label">${cartItem.quantity}</span>
               </span>
-              <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
+              <span class="update-quantity-link link-primary">
                 Update
               </span>
-              <input class="quantity-input js-quantity-input-${matchingProduct.id}">
-              <span class="save-quantity-link             link-primary js-save-link"
-                data-product-id="${matchingProduct.id}">
-                Save
-              </span> 
-              <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
+              <span class="delete-quantity-link link-primary js-delete-link 
+              js-delete-link-${matchingProduct.id}" data-product-id="${matchingProduct.id}">
                 Delete
               </span>
             </div>
@@ -89,7 +76,14 @@ export function renderOrderSummary() {
     let html = '';
 
     deliveryOptions.forEach((deliveryOption) => {
-      const dateString = calculateDeliveryDate(deliveryOption);
+      const today = dayjs();
+      const deliveryDate = today.add(
+        deliveryOption.deliveryDays,
+        'days'
+      );
+      const dateString = deliveryDate.format(
+        `dddd, MMMM D`
+      );
 
       const priceString = deliveryOption.priceCents
         === 0 
@@ -101,11 +95,11 @@ export function renderOrderSummary() {
 
       html +=
       `
-        <div class="delivery-option js-delivery-option" data-product-id="${matchingProduct.id}"
+        <div class="delivery-option js-delivery-option js-delivery-option-${matchingProduct.id}-${deliveryOption.id}" data-product-id="${matchingProduct.id}"
         data-delivery-option-id=${deliveryOption.id}>
           <input type="radio"
             ${isChecked ? 'checked' : ''}
-            class="delivery-option-input"
+            class="delivery-option-input js-delivery-option-input-${matchingProduct.id}-${deliveryOption.id}"
             name="delivery-option-${matchingProduct.id}">
           <div>
             <div class="delivery-option-date">
@@ -131,8 +125,11 @@ export function renderOrderSummary() {
         const productId = link.dataset.productId;
         removeFromCart(productId);
 
-        renderCheckoutHeader();
-        renderOrderSummary();
+        const container = document.querySelector(
+          `.js-cart-item-container-${productId}`
+        );
+        container.remove();
+
         renderPaymentSummary();
       });
     });
@@ -141,42 +138,10 @@ export function renderOrderSummary() {
     .forEach((element) => {
       element.addEventListener('click', () => {
         const {productId, deliveryOptionId} = element.dataset;
-        updateDilveryOption(productId, deliveryOptionId);
-
+        updateDeliveryOption(productId, deliveryOptionId);
         renderOrderSummary();
+
         renderPaymentSummary();
       })
     })
-
-
-    document.querySelectorAll('.js-update-link')
-      .forEach((link) => [
-        link.addEventListener('click', () => {
-          const productId = link.dataset.productId;
-          const conatiner = document.querySelector(`.js-cart-item-container`);
-
-          conatiner.classList.add('is-editing-quantity');
-        })
-      ])
-
-      document.querySelectorAll('.js-save-link')
-        .forEach((link) => {
-          link.addEventListener('click', () => {
-            const productId = link.dataset.productId
-            const container = document.querySelector(`.js-cart-item-container-${productId}`)
-
-            container.classList.remove('is-editing-quantity');
-
-            console.log(container)
-
-            const quantityInput = document.querySelector(`.js-quantity-input-${productId}`);
-            const newQuantity = Number(quantityInput.value);
-
-            updateQuantity(productId, newQuantity);
-
-            renderCheckoutHeader();
-            renderOrderSummary();
-            renderPaymentSummary();
-          });
-        });
-};
+}
