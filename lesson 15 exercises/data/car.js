@@ -14,12 +14,12 @@ class Car {
     const speedInfo = `${this.speed}`;
     const trunkStatus = this.isTrunkOpen ? 'open' : 'closed';
 
-    console.log(carInfo, '- Speed:', speedInfo, 'km/h -', 'trunk:', trunkStatus)
+    console.log(carInfo, '- Speed:', speedInfo, 'km/h', '- trunk:', trunkStatus)
   }
 
   go(){
     if(!this.isTrunkOpen){
-      this.speed += 5;
+    this.speed += 5;
     }
 
     if(this.speed > 200){
@@ -36,13 +36,13 @@ class Car {
   }
 
   openTrunk(){
-      if(this.speed === 0){
-      this.isTrunkOpen = true
+    if(this.speed === 0){
+    this.isTrunkOpen = true;
     }
   }
 
   closeTrunk(){
-    this.isTrunkOpen = false
+    this.isTrunkOpen = false;
   }
 }
 
@@ -56,28 +56,35 @@ const car2 = new Car ({
   model: 'Model 3'
 })
 
-// my tests
+
 console.log(car1)
+car1.displayInfo()
 
 car1.openTrunk()
+car1.displayInfo()
+
+car1.go()
 car1.displayInfo()
 
 car1.closeTrunk()
 car1.displayInfo()
 
 car1.go()
-car1.displayInfo()
-
-car1.go()
 car1.openTrunk()
 car1.displayInfo()
 
+car1.brake()
+car1.openTrunk()
+console.log(car1)
+
+
+
 console.log(car2)
+car2.displayInfo()
 
 car2.openTrunk()
 car2.displayInfo()
 
-car2.openTrunk()
 car2.go()
 car2.displayInfo()
 
@@ -87,3 +94,7 @@ car2.displayInfo()
 car2.go()
 car2.openTrunk()
 car2.displayInfo()
+
+car2.brake()
+car2.openTrunk()
+console.log(car2)
