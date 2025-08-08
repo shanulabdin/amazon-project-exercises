@@ -1,35 +1,36 @@
-import { cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
-import { products, getProduct } from '../../data/products.js';
-import { formatCurrency } from '../utils/money.js';
-import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
-import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'; 
-import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
-import { renderPaymentSummary } from './paymentSummary.js';
+import {cart} from '../../data/cart-class.js';
+import {products, getProduct} from '../../data/products.js';
+import {formatCurrency} from '../utils/money.js';
+import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
+import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
+import {renderPaymentSummary} from './paymentSummary.js';
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
 
     const matchingProduct = getProduct(productId);
 
     const deliveryOptionId = cartItem.deliveryOptionId;
 
-    const  deliveryOption = getDeliveryOption(deliveryOptionId);
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
 
     const today = dayjs();
-      const deliveryDate = today.add(
-        deliveryOption.deliveryDays,
-        'days'
-      );
-      const dateString = deliveryDate.format(
-        'dddd, MMMM D'
-      );
+    const deliveryDate = today.add(
+      deliveryOption.deliveryDays,
+      'days'
+    );
+    const dateString = deliveryDate.format(
+      'dddd, MMMM D'
+    );
 
     cartSummaryHTML += `
-      <div class="cart-item-container js-cart-item-container
-      js-cart-item-container-${matchingProduct.id}">
+      <div class="cart-item-container
+        js-cart-item-container
+        js-cart-item-container-${matchingProduct.id}">
         <div class="delivery-date">
           Delivery date: ${dateString}
         </div>
@@ -39,22 +40,23 @@ export function renderOrderSummary() {
             src="${matchingProduct.image}">
 
           <div class="cart-item-details">
-            <div class="product-name js-product-name-${matchingProduct.id}">
+            <div class="product-name">
               ${matchingProduct.name}
             </div>
-            <div class="product-price
-            js-product-price-${matchingProduct.id}">
+            <div class="product-price">
               ${matchingProduct.getPrice()}
             </div>
-            <div class="product-quantity js-product-quantity-${matchingProduct.id}">
+            <div class="product-quantity
+              js-product-quantity-${matchingProduct.id}">
               <span>
                 Quantity: <span class="quantity-label">${cartItem.quantity}</span>
               </span>
               <span class="update-quantity-link link-primary">
                 Update
               </span>
-              <span class="delete-quantity-link link-primary js-delete-link 
-              js-delete-link-${matchingProduct.id}" data-product-id="${matchingProduct.id}">
+              <span class="delete-quantity-link link-primary js-delete-link
+                js-delete-link-${matchingProduct.id}"
+                data-product-id="${matchingProduct.id}">
                 Delete
               </span>
             </div>
@@ -69,7 +71,6 @@ export function renderOrderSummary() {
         </div>
       </div>
     `;
-
   });
 
   function deliveryOptionsHTML(matchingProduct, cartItem) {
@@ -82,24 +83,22 @@ export function renderOrderSummary() {
         'days'
       );
       const dateString = deliveryDate.format(
-        `dddd, MMMM D`
+        'dddd, MMMM D'
       );
 
-      const priceString = deliveryOption.priceCents
-        === 0 
-          ? 'FREE'
+      const priceString = deliveryOption.priceCents === 0
+        ? 'FREE'
+        : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
-          : `$${formatCurrency(deliveryOption.priceCents)} -`;
+      const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
-      const isChecked = deliveryOption.id === cartItem.deliveryOptionId
-
-      html +=
-      `
-        <div class="delivery-option js-delivery-option js-delivery-option-${matchingProduct.id}-${deliveryOption.id}" data-product-id="${matchingProduct.id}"
-        data-delivery-option-id=${deliveryOption.id}>
+      html += `
+        <div class="delivery-option js-delivery-option"
+          data-product-id="${matchingProduct.id}"
+          data-delivery-option-id="${deliveryOption.id}">
           <input type="radio"
             ${isChecked ? 'checked' : ''}
-            class="delivery-option-input js-delivery-option-input-${matchingProduct.id}-${deliveryOption.id}"
+            class="delivery-option-input"
             name="delivery-option-${matchingProduct.id}">
           <div>
             <div class="delivery-option-date">
@@ -117,13 +116,13 @@ export function renderOrderSummary() {
   }
 
   document.querySelector('.js-order-summary')
-    .innerHTML = cartSummaryHTML
+    .innerHTML = cartSummaryHTML;
 
   document.querySelectorAll('.js-delete-link')
     .forEach((link) => {
       link.addEventListener('click', () => {
         const productId = link.dataset.productId;
-        removeFromCart(productId);
+        cart.removeFromCart(productId);
 
         const container = document.querySelector(
           `.js-cart-item-container-${productId}`
@@ -134,14 +133,13 @@ export function renderOrderSummary() {
       });
     });
 
-    document.querySelectorAll('.js-delivery-option')
+  document.querySelectorAll('.js-delivery-option')
     .forEach((element) => {
       element.addEventListener('click', () => {
         const {productId, deliveryOptionId} = element.dataset;
-        updateDeliveryOption(productId, deliveryOptionId);
+        cart.updateDeliveryOption(productId, deliveryOptionId);
         renderOrderSummary();
-
         renderPaymentSummary();
-      })
-    })
+      });
+    });
 }
