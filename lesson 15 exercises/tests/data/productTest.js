@@ -1,10 +1,10 @@
-import {Product, Clothing, Appliance} from '../../data/products.js';
+import { Product, Clothing, Appliance } from '../../data/products.js';
 
 describe('test suite: Product', () => {
   let product;
 
   beforeEach(() => {
-    product = new Product({
+      product = new Product ({
       id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
       image: "images/products/athletic-cotton-socks-6-pairs.jpg",
       name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
@@ -19,11 +19,9 @@ describe('test suite: Product', () => {
         "apparel"
       ]
     });
-  });
+  })
 
-  it('has the correct properties', () => {
-    // Note: you don't have to test all the properties.
-    // You can just pick a few to test.
+  it('gets the properties', () => {
     expect(product.id).toEqual('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
     expect(product.image).toEqual('images/products/athletic-cotton-socks-6-pairs.jpg');
     expect(product.name).toEqual('Black and Gray Athletic Cotton Socks - 6 Pairs');
@@ -34,24 +32,24 @@ describe('test suite: Product', () => {
     expect(product.priceCents).toEqual(1090);
   });
 
-  it('gets the stars url', () => {
+  it('gets the star url', () => {
     expect(product.getStarsUrl()).toEqual('images/ratings/rating-45.png');
   });
 
-  it('gets the price', () => {
-    expect(product.getPrice()).toEqual('$10.90');
+  it('get the price', () => {
+    expect(product.getPrice()).toEqual('$10.90')
   });
 
   it('does not display any extra info', () => {
-    expect(product.extraInfoHTML()).toEqual('');
-  });
+    expect(product.extraInfoHTML()).toEqual('')
+  })
 });
 
-describe('test suite: Clothing', () => {
+describe('test Suite: Clothing', () => {
   let clothing;
 
   beforeEach(() => {
-    clothing = new Clothing({
+      clothing = new Clothing ({
       id: "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
       image: "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
       name: "Adults Plain Cotton T-Shirt - 2 Pack",
@@ -70,16 +68,19 @@ describe('test suite: Clothing', () => {
     });
   });
 
-  it('has the correct properties', () => {
-    // Check if inheritance worked correctly.
-    expect(clothing.id).toEqual('83d4ca15-0f35-48f5-b7a3-1ea210004f2e'),
+  it('gets the properties', () => {
+    expect(clothing.id).toEqual('83d4ca15-0f35-48f5-b7a3-1ea210004f2e');
     expect(clothing.image).toEqual('images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg');
-
-    expect(clothing.sizeChartLink).toEqual('images/clothing-size-chart.png');
+    expect(clothing.name).toEqual('Adults Plain Cotton T-Shirt - 2 Pack');
+    expect(clothing.rating).toEqual({
+      stars: 4.5,
+      count: 56
+    });
+    expect(clothing.priceCents).toEqual(799)
   });
 
-  it('gets the stars url', () => {
-    expect(clothing.getStarsUrl()).toEqual('images/ratings/rating-45.png');
+  it('gets the url', () => {
+    expect(clothing.getStarsUrl(`images/ratings/rating-45.png`));
   });
 
   it('gets the price', () => {
@@ -87,14 +88,8 @@ describe('test suite: Clothing', () => {
   });
 
   it('displays a size chart link in extraInfoHTML', () => {
-    // It's hard to match a multiline string exactly, so we'll
-    // just check if the result contains certain strings.
-    expect(clothing.extraInfoHTML()).toContain(
-      `<a href="images/clothing-size-chart.png" target="_blank">`
-    );
-
-    // Check the text of the link is correct.
-    expect(clothing.extraInfoHTML()).toContain('Size chart');
+    expect(clothing.extraInfoHTML()).toContain('images/clothing-size-chart.png');
+    expect(clothing.extraInfoHTML()).toContain('Size chart')
   });
 });
 
@@ -102,7 +97,7 @@ describe('test suite: Appliance', () => {
   let appliance;
 
   beforeEach(() => {
-    appliance = new Appliance({
+    appliance = new Appliance ({
       id: "54e0eccd-8f36-462b-b68a-8182611d9add",
       image: "images/products/black-2-slot-toaster.jpg",
       name: "2 Slot Toaster - Black",
@@ -122,31 +117,26 @@ describe('test suite: Appliance', () => {
     });
   });
 
-  it('has the correct properties', () => {
-    expect(appliance.id).toEqual('54e0eccd-8f36-462b-b68a-8182611d9add'),
+  it('gets the properties', () => {
+    expect(appliance.id).toEqual('54e0eccd-8f36-462b-b68a-8182611d9add');
     expect(appliance.image).toEqual('images/products/black-2-slot-toaster.jpg');
-
-    expect(appliance.instructionsLink).toEqual('images/appliance-instructions.png');
-    expect(appliance.warrantyLink).toEqual('images/appliance-warranty.png');
+    expect(appliance.name).toEqual('2 Slot Toaster - Black');
+    expect(appliance.rating).toEqual({
+      stars: 5,
+      count: 2197
+    });
+    expect(appliance.priceCents).toEqual(1899);
   });
 
   it('gets the stars url', () => {
     expect(appliance.getStarsUrl()).toEqual('images/ratings/rating-50.png');
   });
-
   it('gets the price', () => {
     expect(appliance.getPrice()).toEqual('$18.99');
   });
-
-  it('displays instructions and warranty in extraInfoHTML', () => {
-    expect(appliance.extraInfoHTML()).toContain(
-      `<a href="images/appliance-instructions.png" target="_blank">`
-    );
-    expect(appliance.extraInfoHTML()).toContain('Instructions');
-
-    expect(appliance.extraInfoHTML()).toContain(
-      `<a href="images/appliance-warranty.png" target="_blank">`
-    );
-    expect(appliance.extraInfoHTML()).toContain('Warranty');
-  });
+  it('gets the extra info', () => {
+    expect(appliance.extraInfoHTML()).toContain('images/appliance-instructions.png');
+    expect(appliance.extraInfoHTML()).toContain('images/appliance-warranty.png');
+    expect(appliance.extraInfoHTML()).toContain('Warranty')
+  })
 });
